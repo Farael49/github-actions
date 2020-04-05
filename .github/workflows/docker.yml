@@ -30,9 +30,15 @@ jobs:
         restore-keys: ${{ runner.os }}-m2
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+    - run: mkdir artifacts && cp target/*.jar artifacts
+    - uses: actions/upload-artifact@v1
+      with:
+        name: package
+        path: artifacts
 
-#We should also test our docker container, but that'll be for another project focused on docker practices
-#Here we simply build & push our docker image
+
+  #We should also test our docker container, but that'll be for another project focused on docker practices
+  #Here we simply build & push our docker image
   push:
     # Ensure build job passes before pushing image.
     needs: build
@@ -41,6 +47,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Download the built jar
+      uses: actions/download-artifact@v1
+      with:
+        name: package
+        path: target
 
     - name: Build image
       run: docker build . --file Dockerfile --tag image
