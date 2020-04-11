@@ -29,13 +29,22 @@ Which environment to target (a custom runner can also be provided):
 
 Java oriented : 
 
-Setting up a specific JDK (currently defaults to JDK8/x64) :
+Setting up a specific JDK version (currently defaults to JDK8/x64) :
 
     - name: Set up JDK 1.14
       uses: actions/setup-java@v1
       with:
         java-version: 1.14
         architecture: x64
+
+Getting a JDK from a specific provider :
+
+    - run: curl -O https://download.java.net/java/early_access/jdk15/18/GPL/openjdk-15-ea+18_linux-x64_bin.tar.gz
+    - name: Set up JDK 15
+      uses: actions/setup-java@v1
+      with:
+        java-version: 15
+        jdkFile: openjdk-15-ea+18_linux-x64_bin.tar.gz
 
 Caching Maven dependencies :
 
